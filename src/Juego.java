@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,17 +13,19 @@ public class Juego {
         tablero = new Tablero(0, 0);
     }
 
-    public void iniciar(char tipoJuego) {
+    public boolean iniciar(char tipoJuego) {
+        boolean juegoResuelto = false;
+
         switch (tipoJuego) {
             case 'a':
                 tablero.cargarDesdeArchivo("./test/datos.txt");
                 cargarSolucion("a");
-                jugar();
+                juegoResuelto = jugar();
                 break;
             case 'b':
                 tablero.cargarPredefinido();
                 cargarSolucion("b");
-                jugar();
+                juegoResuelto = jugar();
                 break;
             case 'c':
                 boolean datosValidos = false;
@@ -47,7 +50,7 @@ public class Juego {
                         tablero.generarAleatorio(filas, columnas, nivel);
                         datosValidos = true;
                         cargarSolucion("c");
-                        jugar();
+                        juegoResuelto = jugar();
                     } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());
                         System.out.println("Por favor, ingresa los datos nuevamente.");
@@ -56,14 +59,17 @@ public class Juego {
                 break;
             default:
                 System.out.println("Opción no válida.");
-                return;
+                break;
         }
+
+        return juegoResuelto;
     }
 
-    public void jugar() {
+    public boolean  jugar() {
         tiempoInicio = System.currentTimeMillis();
         Scanner scanner = new Scanner(System.in);
         boolean continuarJugando = true;
+        boolean volverJugar = false;
 
         tablero.mostrar(); // Muestra el estado actual del tablero
         while (continuarJugando) {
@@ -107,10 +113,11 @@ public class Juego {
             if (tablero.esSolucion()) {
                 System.out.println("Felicidades! Has resuelto el tablero en " + minutosTranscurridos + ":" + segundosTranscurridos + " minuto/s.");
                 continuarJugando = false;
+                volverJugar = true;
             }
         }
 
-        scanner.close();
+        return volverJugar;
     }
 
     public void cargarSolucion(String opcion) {

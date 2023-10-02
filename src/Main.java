@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Juego juego = new Juego();
+        boolean juegoResuelto = false;
 
         System.out.println("\n" +
                 "┏┓  ┓•┏┓•   \n" +
@@ -11,10 +12,10 @@ public class Main {
                 "┗┛┗┛┗┗┛┗┗┣┛┛\n" +
                 "         ┛  \n");
 
-        System.out.println("Ingrese \'S\' para jugar:");
+        System.out.println("¿Deseas jugar Soliflips? (S/N): ");
         String respuesta = scanner.nextLine();
 
-        if (respuesta.equalsIgnoreCase("S")) {
+        do {
             System.out.println("Elige una opcion (a, b, c): ");
             System.out.println("a) Tomar datos del archivo \"datos.txt\"");
             System.out.println("b) Usar el tablero predefinido");
@@ -24,20 +25,28 @@ public class Main {
 
             switch (opcion) {
                 case 'a':
-                    juego.iniciar('a');
+                    juegoResuelto = juego.iniciar('a');
                     break;
                 case 'b':
-                    juego.iniciar('b');
+                    juegoResuelto = juego.iniciar('b');
                     break;
                 case 'c':
-                    juego.iniciar('c');
+                    juegoResuelto = juego.iniciar('c');
                     break;
                 default:
                     System.out.println("Opción no válida.");
                     break;
             }
-        } else {
-            System.out.println("Hasta luego!");
-        }
+
+            if (juegoResuelto) {
+                System.out.println("¿Deseas volver a jugar? (S/N):");
+                respuesta = scanner.nextLine();
+            } else {
+                break;
+            }
+
+        } while (respuesta.equalsIgnoreCase("S"));
+
+        System.out.println("Hasta luego!");
     }
 }
