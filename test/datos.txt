@@ -1,0 +1,8 @@
+5 6
+|R \A |R \R /R |R
+-R /R -A \R \R /R
+\R \R /R -A \R -R
+-R -R \R -R |A -R
+\R /R |R -R /R |A
+1
+1 2
