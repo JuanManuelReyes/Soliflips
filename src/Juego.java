@@ -28,34 +28,58 @@ public class Juego {
                 juegoResuelto = jugar();
                 break;
             case 'c':
-                boolean datosValidos = false;
+                Scanner scanner = new Scanner(System.in);
+                boolean datosValidos;
+                int filas = 0, columnas = 0, nivel = 0;
+
+                datosValidos = false;
                 while (!datosValidos) {
                     try {
-                        Scanner scanner = new Scanner(System.in);
                         System.out.println("Ingresa la cantidad de filas:");
-                        int filas = scanner.nextInt();
+                        filas = scanner.nextInt();
                         if (filas < 3 || filas > 9) {
                             throw new IllegalArgumentException("El número de filas debe estar entre 3 y 9.");
                         }
-                        System.out.println("Ingresa la cantidad de columnas:");
-                        int columnas = scanner.nextInt();
-                        if (columnas < 3 || columnas > 9) {
-                            throw new IllegalArgumentException("El número de columnas debe estar entre 3 y 9.");
-                        }
-                        System.out.println("Elige un nivel (1 a 8):");
-                        int nivel = scanner.nextInt();
-                        if (nivel < 1 || nivel > 8) {
-                            throw new IllegalArgumentException("El nivel debe estar entre 1 y 8.");
-                        }
-                        tablero.generarAleatorio(filas, columnas, nivel);
                         datosValidos = true;
-                        cargarSolucion("c");
-                        juegoResuelto = jugar();
                     } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());
                         System.out.println("Por favor, ingresa los datos nuevamente.");
                     }
                 }
+
+                datosValidos = false;
+                while (!datosValidos) {
+                    try {
+                        System.out.println("Ingresa la cantidad de columnas:");
+                        columnas = scanner.nextInt();
+                        if (columnas < 3 || columnas > 9) {
+                            throw new IllegalArgumentException("El número de columnas debe estar entre 3 y 9.");
+                        }
+                        datosValidos = true;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Por favor, ingresa los datos nuevamente.");
+                    }
+                }
+
+                datosValidos = false;
+                while (!datosValidos) {
+                    try {
+                        System.out.println("Elige un nivel (1 a 8):");
+                        nivel = scanner.nextInt();
+                        if (nivel < 1 || nivel > 8) {
+                            throw new IllegalArgumentException("El nivel debe estar entre 1 y 8.");
+                        }
+                        datosValidos = true;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Por favor, ingresa los datos nuevamente.");
+                    }
+                }
+
+                tablero.generarAleatorio(filas, columnas, nivel);
+                cargarSolucion("c");
+                juegoResuelto = jugar();
                 break;
             default:
                 System.out.println("Opción no válida.");
@@ -91,6 +115,7 @@ public class Juego {
                 tablero.mostrarHistorial();
             }
             if (entrada.equals("-1") || entrada.equals("-1 -1")) {
+                solucion.remove(solucion.size() - 1);
                 tablero.deshacer();
             }
 
@@ -123,7 +148,7 @@ public class Juego {
     public void cargarSolucion(String opcion) {
         switch (opcion) {
             case "a":
-                String rutaArchivo = "src/datos.txt";
+                String rutaArchivo = "./test/datos.txt";
                 try {
                     Scanner scanner = new Scanner(new File(rutaArchivo));
                     boolean agregarASolucion = false;
