@@ -15,4 +15,4 @@ Este juego fue desarrollado como un proyecto académico para la materia de Progr
 ## Autores
 
 - Juan Manuel Reyes (Nro. 316445)
-- Facundo Layes (Nro. 1)
+- Facundo Layes (Nro. 248464)
