@@ -12,6 +12,11 @@ El objetivo del juego es tener todo el tablero de color rojo o todo de color azu
 
 Este juego fue desarrollado como un proyecto académico para la materia de Programación II en la Facultad de Ingeniería de la Universidad ORT Uruguay. Se entregó en formato digital, cumpliendo con las especificaciones y requerimientos de la evaluación.
 
+## Diagrama de Clases
+
+![UML](Org charts.png)
+
+
 ## Autores
 
 - Juan Manuel Reyes (Nro. 316445)
