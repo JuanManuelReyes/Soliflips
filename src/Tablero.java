@@ -1,13 +1,10 @@
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.io.File;
+import java.io.*;
+import java.util.*;
 
 public class Tablero {
     private List<String> historialMovimientos = new ArrayList<>();
     private List<String> movimientosAleatorios = new ArrayList<>();
+    private List<String> solucion = new ArrayList<>();
 
     private Celda[][] matriz;
     private static final String[][] TABLERO_PREDEFINIDO = {
@@ -27,6 +24,30 @@ public class Tablero {
 
     public List<String> getMovimientosAleatorios() {
         return movimientosAleatorios;
+    }
+
+    public void agregarSolucion(String mov){
+        if (solucion.contains(mov)) {
+            solucion.remove(mov);
+        }else{
+            solucion.add(mov);
+        }
+    }
+
+    public void agregarSolucionAleatoria(){
+        solucion.addAll(movimientosAleatorios);
+    }
+
+
+    public void mostrarSolucion() {
+        System.out.println("Pasos para llegar a la solucion: ");
+        for (String movimiento : solucion) {
+            System.out.println(movimiento);
+        }
+    }
+
+    public void borrarSolucion(){
+        solucion.clear();
     }
 
     public void cargarPredefinido() {
@@ -65,15 +86,23 @@ public class Tablero {
     }
 
     public void generarAleatorio(int filas, int columnas, int nivel) {
+        movimientosAleatorios.clear();
         matriz = new Celda[filas][columnas];
+        Random rand = new Random();
+        char color;
+        if (rand.nextInt(2)==0) {
+            color='R';
+        }else{
+            color='A';
+        }
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 char simbolo = obtenerSimboloAleatorio();
-                matriz[i][j] = new Celda(String.valueOf(simbolo), 'R');
+                matriz[i][j] = new Celda(String.valueOf(simbolo), color);
             }
         }
 
-        Random rand = new Random();
+
         for (int i = 0; i < nivel; i++) {
             int filaRandom = rand.nextInt(filas);
             int columnaRandom = rand.nextInt(columnas);
@@ -239,7 +268,7 @@ public class Tablero {
     public void hacerMovimiento(int fila, int columna, boolean agregar) {
         Tablero tableroAntes = this.clonar();
         if (agregar){
-            historialMovimientos.add((fila + 1) + ", " + (columna + 1));
+            historialMovimientos.add((fila + 1) + " " + (columna + 1));
         }
         String celda = getCelda(fila, columna).toString();
         char simbolo = celda.charAt(0);
@@ -343,18 +372,33 @@ public class Tablero {
        }
     }
 
+//    public void deshacer() {
+//        if (!historialMovimientos.isEmpty()) {
+//            String ultimoMovimiento = historialMovimientos.remove(historialMovimientos.size() - 1);
+//
+//            String[] partes = ultimoMovimiento.split(",");
+//            int fila = Integer.parseInt(partes[0].trim()) - 1;
+//            int columna = Integer.parseInt(partes[1].trim()) - 1;
+//
+//            hacerMovimiento(fila, columna, false);
+//        } else {
+//            System.out.println("No hay movimientos para deshacer.");
+//        }
+//    }
+
     public void deshacer() {
         if (!historialMovimientos.isEmpty()) {
-            String ultimoMovimiento = historialMovimientos.remove(historialMovimientos.size() - 1);
-
-            String[] partes = ultimoMovimiento.split(",");
-            int fila = Integer.parseInt(partes[0].trim()) - 1;
-            int columna = Integer.parseInt(partes[1].trim()) - 1;
-
+            int fila = Character.getNumericValue(historialMovimientos.get(historialMovimientos.size() - 1).charAt(0) - 1);
+            int columna = Character.getNumericValue(historialMovimientos.get(historialMovimientos.size() - 1).charAt(2) - 1);
             hacerMovimiento(fila, columna, false);
-        } else {
-            System.out.println("No hay movimientos para deshacer.");
+            agregarSolucion((fila+1) + " " + (columna+1));
+            historialMovimientos.remove(historialMovimientos.size()-1);
+        }else{
+            System.out.println("No se han realizado movimientos.");
         }
     }
 
+    public void borrarHistorial(){
+        historialMovimientos.clear();
+    }
 }
