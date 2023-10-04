@@ -14,7 +14,7 @@ Este juego fue desarrollado como un proyecto académico para la materia de Progr
 
 ## Diagrama de Clases
 
-![UML](Org charts.png)
+![UML](UML.png)
 
 
 ## Autores
