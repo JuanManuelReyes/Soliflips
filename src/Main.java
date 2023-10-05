@@ -17,7 +17,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Juego juego = new Juego();
         boolean juegoResuelto = false;
-        System.out.println("Soliflips\n");
+        System.out.println("\n" +
+                "┏┓  ┓•┏┓•   \n" +
+                "┗┓┏┓┃┓╋┃┓┏┓┏\n" +
+                "┗┛┗┛┗┗┛┗┗┣┛┛\n" +
+                "         ┛  \n");
         System.out.println("Ingrese \'S\' para empezar a jugar.");
         String respuesta = scanner.nextLine().toUpperCase();
 
@@ -29,7 +33,13 @@ public class Main {
                 System.out.println("b) Usar el tablero predefinido");
                 System.out.println("c) Usar un tablero al azar");
 
-                char opcion = scanner.nextLine().charAt(0);
+                String op = scanner.nextLine();
+                char opcion;
+                if (op.equals("")){
+                    continue;
+                }else{
+                    opcion = op.charAt(0);
+                }
 
                 // Iniciar los distintos tipos de juego
                 switch (opcion) {

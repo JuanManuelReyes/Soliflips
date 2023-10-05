@@ -107,7 +107,7 @@ public class Juego {
 
         tablero.mostrar();
         while (continuarJugando) {
-            System.out.println("Ingresa tu movimiento (fila y luego columna en líneas separadas) o 'X' para salir, 'S' para ver solucion, 'H' para ver historial:");
+            System.out.println("Ingresa tu movimiento (fila) o 'X' para salir, 'S' para ver solucion, 'H' para ver historial:");
             String entradaFila = scanner.nextLine().toUpperCase();
 
             if (entradaFila.equals("X") || entradaFila.equals("S") || entradaFila.equals("H") || entradaFila.equals("-1") || entradaFila.equals("-1 -1")) {
