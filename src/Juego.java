@@ -1,14 +1,36 @@
+/*
+Autores:
+Juan Manuel Reyes | Nro. Estudiante 316445
+Facundo Layes | Nro. Estudiante 248464
+
+Repositorio: https://github.com/JuanManuelReyes/Soliflips
+ */
+
 import java.io.*;
 import java.util.*;
 
+/**
+ * La clase Juego representa la logica principal del juego Soliflips.
+ * Gestiona el flujo del juego, las interacciones del usuario y el estado del juego.
+ */
 public class Juego {
     private Tablero tablero;
     private long tiempoInicio;
 
+    /**
+     * Constructor por defecto para la clase Juego.
+     * Inicializa un nuevo juego con un tablero de tamaño 0x0.
+     */
     public Juego() {
         tablero = new Tablero(0, 0);
     }
 
+    /**
+     * Inicia un nuevo juego basado en el tipo de juego seleccionado en main meni.
+     *
+     * @param tipoJuego Caracter que indica el tipo de juego: 'a' para cargar desde archivo, 'b' para tablero predefinido, 'c' para tablero aleatorio.
+     * @return Verdadero si el juego fue resuelto, falso en caso contrario.
+     */
     public boolean iniciar(char tipoJuego) {
         boolean juegoResuelto = false;
 
@@ -33,13 +55,21 @@ public class Juego {
                 juegoResuelto = jugar();
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("Opcion no valida.");
                 break;
         }
 
         return juegoResuelto;
     }
 
+    /**
+     * Solicita un dato numérico al usuario dentro de un rango específico.
+     *
+     * @param mensaje Mensaje mostrado al usuario para indicar qué dato debe ingresar.
+     * @param desde Valor mínimo que el usuario puede ingresar.
+     * @param hasta Valor maximo que el usuario puede ingresar.
+     * @return El valor numérico ingresado por el usuario.
+     */
     public int pedirDato(String mensaje, int desde, int hasta){
         Scanner in = new Scanner(System.in);
         int dato = 0;
@@ -63,30 +93,46 @@ public class Juego {
         }
         return dato;
     }
+
+    /**
+     * Permite al usuario jugar interactuando con el tablero.
+     *
+     * @return Verdadero si el usuario desea volver a jugar después de resolver el tablero, falso en caso contrario.
+     */
     public boolean jugar() {
         tiempoInicio = System.currentTimeMillis();
         Scanner scanner = new Scanner(System.in);
         boolean continuarJugando = true;
         boolean volverJugar = false;
 
-        tablero.mostrar(); // Muestra el estado actual del tablero
+        tablero.mostrar();
         while (continuarJugando) {
-            System.out.println("Ingresa tu movimiento (fila columna) o 'X' para salir, 'S' para ver solucion, 'H' para ver historial:");
-            String entrada = scanner.nextLine().toUpperCase();
+            System.out.println("Ingresa tu movimiento (fila y luego columna en líneas separadas) o 'X' para salir, 'S' para ver solucion, 'H' para ver historial:");
+            String entradaFila = scanner.nextLine().toUpperCase();
 
-            long tiempoFinal = System.currentTimeMillis();
-            long tiempoTranscurrido = tiempoFinal - tiempoInicio; // en milisegundos
-            long segundosTranscurridos = tiempoTranscurrido / 1000;
-            long minutosTranscurridos = segundosTranscurridos / 60;
-            segundosTranscurridos %= 60;
-            String segundosFormat = String.format("%02d", segundosTranscurridos);
-
-            String[] partes = entrada.split(" ");
-            if (partes.length == 2 && !entrada.equals("-1 -1")) {
+            if (entradaFila.equals("X") || entradaFila.equals("S") || entradaFila.equals("H") || entradaFila.equals("-1") || entradaFila.equals("-1 -1")) {
+                if (entradaFila.equals("X")) {
+                    System.out.println("Has decidido salir del juego.");
+                    continuarJugando = false;
+                } else if (entradaFila.equals("S")) {
+                    tablero.mostrarSolucion();
+                } else if (entradaFila.equals("H")) {
+                    tablero.mostrarHistorial();
+                } else if (entradaFila.equals("-1") || entradaFila.equals("-1 -1")) {
+                    tablero.deshacer();
+                }
+            } else {
                 try {
-                    int fila = Integer.parseInt(partes[0]) - 1; // Se resta 1 para ajustar con el indice
-                    int columna = Integer.parseInt(partes[1]) - 1;
-                    tablero.agregarSolucion(entrada);
+                    int fila = Integer.parseInt(entradaFila);
+                    System.out.println("Ingresa la columna:");
+                    String entradaColumna = scanner.nextLine().toUpperCase();
+                    int columna = Integer.parseInt(entradaColumna);
+
+                    tablero.agregarSolucion(fila + " " + columna);
+
+                    fila -= 1;
+                    columna -= 1;
+
                     tablero.hacerMovimiento(fila, columna, true);
                 } catch (NumberFormatException e) {
                     System.out.println("Entrada no valida. Por favor, ingresa coordenadas validas o 'X' para salir.");
@@ -95,17 +141,12 @@ public class Juego {
                 }
             }
 
-            if (entrada.equals("X")) {
-                System.out.println("Has decidido salir del juego después de " + minutosTranscurridos + " minutos y " + segundosTranscurridos + " segundos.");
-                continuarJugando = false;
-            } else if (entrada.equals("S")) {
-                tablero.mostrarSolucion();
-            } else if (entrada.equals("H")) {
-                tablero.mostrarHistorial();
-            }
-            if (entrada.equals("-1") || entrada.equals("-1 -1")) {
-                tablero.deshacer();
-            }
+            long tiempoFinal = System.currentTimeMillis();
+            long tiempoTranscurrido = tiempoFinal - tiempoInicio;
+            long segundosTranscurridos = tiempoTranscurrido / 1000;
+            long minutosTranscurridos = segundosTranscurridos / 60;
+            segundosTranscurridos %= 60;
+            String segundosFormat = String.format("%02d", segundosTranscurridos);
 
             if (tablero.esSolucion()) {
                 System.out.println("Felicidades! Has resuelto el tablero en " + minutosTranscurridos + ":" + segundosFormat);
@@ -119,6 +160,11 @@ public class Juego {
         return volverJugar;
     }
 
+    /**
+     * Carga la solucion del juego basado en la opcion seleccionada.
+     *
+     * @param opcion String que indica la opcion de juego: 'a' para cargar desde archivo, 'b' para tablero predefinido, 'c' para tablero aleatorio.
+     */
     public void cargarSolucion(String opcion) {
         switch (opcion) {
             case "a":
@@ -128,9 +174,9 @@ public class Juego {
                     boolean agregarASolucion = false;
 
                     while (scanner.hasNextLine()) {
-                        String linea = scanner.nextLine().trim();  // Lee linea del archivo y saca espacios al principio y al final
+                        String linea = scanner.nextLine().trim();
 
-                        if (agregarASolucion) { // Si es true agrega a lista de solu
+                        if (agregarASolucion) {
                             tablero.agregarSolucion(linea);
                             continue;
                         }
@@ -139,10 +185,9 @@ public class Juego {
                             int numero = Integer.parseInt(linea);
 
                             if (numero >= 1 && numero <= 8) {
-                                agregarASolucion = true; // A partir de ahora vienen las soluciones
+                                agregarASolucion = true;
                             }
                         } catch (NumberFormatException e) {
-                            // La linea no es un número vlido, simplemente continua
                             continue;
                         }
                     }

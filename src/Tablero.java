@@ -1,6 +1,18 @@
+/*
+Autores:
+Juan Manuel Reyes | Nro. Estudiante 316445
+Facundo Layes | Nro. Estudiante 248464
+
+Repositorio: https://github.com/JuanManuelReyes/Soliflips
+ */
+
 import java.io.*;
 import java.util.*;
 
+/**
+ * La clase Tablero representa el tablero del juego Soliflips.
+ * Gestiona el estado del tablero, los movimientos realizados y la solucion.
+ */
 public class Tablero {
     private List<String> historialMovimientos = new ArrayList<>();
     private List<String> movimientosAleatorios = new ArrayList<>();
@@ -14,18 +26,42 @@ public class Tablero {
             {"\\R", "-R", "|R", "\\R", "|A", "|R"},
             {"\\R", "/R", "/R", "|A", "/A", "\\A"},
     };
+
+    /**
+     * Obtiene una celda especifica del tablero.
+     *
+     * @param fila indice de la fila de la celda.
+     * @param columna indice de la columna de la celda.
+     * @return La celda en la posicion especificada.
+     */
     public Celda getCelda(int fila, int columna) {
         return matriz[fila][columna];
     }
 
+    /**
+     * Constructor del tablero con dimensiones especificas.
+     *
+     * @param filas Numero de filas del tablero.
+     * @param columnas Numero de columnas del tablero.
+     */
     public Tablero(int filas, int columnas) {
         matriz = new Celda[filas][columnas];
     }
 
+    /**
+     * Obtiene la lista de movimientos aleatorios generados.
+     *
+     * @return Lista de movimientos aleatorios.
+     */
     public List<String> getMovimientosAleatorios() {
         return movimientosAleatorios;
     }
 
+    /**
+     * Agrega o elimina un movimiento de la solucion.
+     *
+     * @param mov Movimiento a agregar o eliminar.
+     */
     public void agregarSolucion(String mov){
         if (solucion.contains(mov)) {
             solucion.remove(mov);
@@ -34,11 +70,16 @@ public class Tablero {
         }
     }
 
+    /**
+     * Agrega todos los movimientos aleatorios a la solucion.
+     */
     public void agregarSolucionAleatoria(){
         solucion.addAll(movimientosAleatorios);
     }
 
-
+    /**
+     * Muestra la solucion actual del tablero.
+     */
     public void mostrarSolucion() {
         System.out.println("Pasos para llegar a la solucion: ");
         for (String movimiento : solucion) {
@@ -46,10 +87,16 @@ public class Tablero {
         }
     }
 
+    /**
+     * Borra la solucion actual del tablero.
+     */
     public void borrarSolucion(){
         solucion.clear();
     }
 
+    /**
+     * Carga el tablero predefinido.
+     */
     public void cargarPredefinido() {
         int filas = TABLERO_PREDEFINIDO.length;
         int columnas = TABLERO_PREDEFINIDO[0].length;
@@ -63,6 +110,11 @@ public class Tablero {
         }
     }
 
+    /**
+     * Carga un tablero desde un archivo especifico.
+     *
+     * @param nombreArchivo Ruta del archivo desde donde se cargara el tablero.
+     */
     public void cargarDesdeArchivo(String nombreArchivo) {
         try {
             Scanner scanner = new Scanner(new File(nombreArchivo));
@@ -85,6 +137,13 @@ public class Tablero {
         }
     }
 
+    /**
+     * Genera un tablero aleatorio de dimensiones y dificultad especificos.
+     *
+     * @param filas Numero de filas del tablero.
+     * @param columnas Numero de columnas del tablero.
+     * @param nivel Nivel de dificultad del tablero (cantidad de movimientos para solucionarlo).
+     */
     public void generarAleatorio(int filas, int columnas, int nivel) {
         movimientosAleatorios.clear();
         matriz = new Celda[filas][columnas];
@@ -128,8 +187,11 @@ public class Tablero {
         return simbolo;
     }
 
+    /**
+     * Muestra el tablero actual en consola.
+     */
     public void mostrar() {
-        // Códigos ANSI para colores
+        // Codigos ANSI para colores
         final String ROJO = "\u001B[31m";
         final String AZUL = "\u001B[34m";
         final String RESET = "\u001B[0m";
@@ -172,8 +234,13 @@ public class Tablero {
         }
     }
 
+    /**
+     * Muestra el tablero actual junto a otro tablero especificado.
+     *
+     * @param tableroAntes Tablero que se mostrara junto al tablero actual.
+     */
     public void mostrarJunto(Tablero tableroAntes) {
-        // Códigos ANSI para colores
+        // Codigos ANSI para colores
         final String ROJO = "\u001B[31m";
         final String AZUL = "\u001B[34m";
         final String RESET = "\u001B[0m";
@@ -222,7 +289,7 @@ public class Tablero {
             System.out.println("|");
         }
 
-        // Imprimir la ultima línea separatoria
+        // Imprimir la ultima linea separatoria
         System.out.print("  "); // Espacios para alinear con el numero de fila
         for (int k = 0; k < columnas; k++) {
             System.out.print("+---");
@@ -235,6 +302,11 @@ public class Tablero {
         System.out.println("+");
     }
 
+    /**
+     * Crea y devuelve una copia del tablero actual.
+     *
+     * @return Una copia del tablero actual.
+     */
     public Tablero clonar() {
         Tablero clon = new Tablero(matriz.length, matriz[0].length);
         for (int i = 0; i < matriz.length; i++) {
@@ -248,10 +320,21 @@ public class Tablero {
         return clon;
     }
 
+    /**
+     * Cambia el color de una celda especifica.
+     *
+     * @param fila indice de la fila de la celda.
+     * @param columna indice de la columna de la celda.
+     */
     public void cambiarColor(int fila, int columna) {
         matriz[fila][columna].cambiarColor();
     }
 
+    /**
+     * Verifica si el tablero actual es una solucion.
+     *
+     * @return Verdadero si el tablero es una solucion, falso en caso contrario.
+     */
     public boolean esSolucion() {
         boolean solucion = true;
         char primerColor = matriz[0][0].toString().charAt(1);
@@ -265,6 +348,13 @@ public class Tablero {
         return solucion;
     }
 
+    /**
+     * Realiza un movimiento en el tablero.
+     *
+     * @param fila indice de la fila del movimiento.
+     * @param columna indice de la columna del movimiento.
+     * @param agregar Indica si el movimiento debe ser agregado al historial.
+     */
     public void hacerMovimiento(int fila, int columna, boolean agregar) {
         Tablero tableroAntes = this.clonar();
         if (agregar){
@@ -294,7 +384,12 @@ public class Tablero {
         }
     }
 
-
+    /**
+     * Genera un movimiento en el tablero basado en la posicion dada.
+     *
+     * @param fila indice de la fila del movimiento.
+     * @param columna indice de la columna del movimiento.
+     */
     public void generarMovimiento(int fila, int columna) {
         Tablero tableroAntes = this.clonar();
 
@@ -317,6 +412,12 @@ public class Tablero {
         }
     }
 
+    /**
+     * Cambia el color de las celdas en diagonal desde la posicion dada, en direccion "/".
+     *
+     * @param fila indice de la fila de inicio.
+     * @param columna indice de la columna de inicio.
+     */
     public void flipDiagonalSlash(int fila, int columna) {
         int i = fila, j = columna;
         while (i >= 0 && j < matriz[0].length) {
@@ -333,6 +434,12 @@ public class Tablero {
         }
     }
 
+    /**
+     * Cambia el color de las celdas en diagonal desde la posicion dada, en direccion "\".
+     *
+     * @param fila indice de la fila de inicio.
+     * @param columna indice de la columna de inicio.
+     */
     public void flipDiagonalBackslash(int fila, int columna) {
         int i = fila, j = columna;
         while (i >= 0 && j >= 0) {
@@ -349,18 +456,31 @@ public class Tablero {
         }
     }
 
+    /**
+     * Cambia el color de todas las celdas en la fila dada.
+     *
+     * @param fila indice de la fila a cambiar.
+     */
     public void flipHorizontal(int fila) {
         for (int j = 0; j < matriz[0].length; j++) {
             matriz[fila][j].cambiarColor();
         }
     }
 
+    /**
+     * Cambia el color de todas las celdas en la columna dada.
+     *
+     * @param columna indice de la columna a cambiar.
+     */
     public void flipVertical(int columna) {
         for (int i = 0; i < matriz.length; i++) {
             matriz[i][columna].cambiarColor();
         }
     }
 
+    /**
+     * Muestra el historial de movimientos realizados en el tablero.
+     */
     public void mostrarHistorial() {
        if (historialMovimientos.isEmpty()){
            System.out.println("No se han realizado movimientos.");
@@ -372,20 +492,9 @@ public class Tablero {
        }
     }
 
-//    public void deshacer() {
-//        if (!historialMovimientos.isEmpty()) {
-//            String ultimoMovimiento = historialMovimientos.remove(historialMovimientos.size() - 1);
-//
-//            String[] partes = ultimoMovimiento.split(",");
-//            int fila = Integer.parseInt(partes[0].trim()) - 1;
-//            int columna = Integer.parseInt(partes[1].trim()) - 1;
-//
-//            hacerMovimiento(fila, columna, false);
-//        } else {
-//            System.out.println("No hay movimientos para deshacer.");
-//        }
-//    }
-
+    /**
+     * Deshace el ultimo movimiento realizado en el tablero.
+     */
     public void deshacer() {
         if (!historialMovimientos.isEmpty()) {
             int fila = Character.getNumericValue(historialMovimientos.get(historialMovimientos.size() - 1).charAt(0) - 1);
@@ -398,6 +507,9 @@ public class Tablero {
         }
     }
 
+    /**
+     * Borra el historial de movimientos del tablero.
+     */
     public void borrarHistorial(){
         historialMovimientos.clear();
     }

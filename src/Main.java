@@ -1,15 +1,23 @@
+/*
+Autores:
+Juan Manuel Reyes | Nro. Estudiante 316445
+Facundo Layes | Nro. Estudiante 248464
+
+Repositorio: https://github.com/JuanManuelReyes/Soliflips
+ */
+
 import java.util.*;
 
+/**
+ * La clase Main es el punto de entrada del juego Soliflips.
+ * Inicia y gestiona el ciclo principal del juego.
+ */
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Juego juego = new Juego();
         boolean juegoResuelto = false;
-        System.out.println("\n" +
-                "┏┓  ┓•┏┓•   \n" +
-                "┗┓┏┓┃┓╋┃┓┏┓┏\n" +
-                "┗┛┗┛┗┗┛┗┗┣┛┛\n" +
-                "         ┛  \n");
+        System.out.println("Soliflips\n");
         System.out.println("Ingrese \'S\' para empezar a jugar.");
         String respuesta = scanner.nextLine().toUpperCase();
 
@@ -23,6 +31,7 @@ public class Main {
 
                 char opcion = scanner.nextLine().charAt(0);
 
+                // Iniciar los distintos tipos de juego
                 switch (opcion) {
                     case 'a':
                         juegoResuelto = juego.iniciar('a');
@@ -37,9 +46,11 @@ public class Main {
                         opcionValida=true;
                         break;
                     default:
-                        System.out.println("Opción no válida.");
+                        System.out.println("Opcion no valida.");
                         break;
                 }
+
+                // Verifica si el juego ha sido resuelto.
                 if (juegoResuelto) {
                     System.out.println("Ingrese \'S\' para volver a jugar.");
                     respuesta = scanner.nextLine().toUpperCase();
